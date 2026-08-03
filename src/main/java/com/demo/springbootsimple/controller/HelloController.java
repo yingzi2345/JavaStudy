@@ -30,12 +30,12 @@ public class HelloController {
         return "Hello SpringBoot!";
     }*/
 
-    @PostMapping("/user")//get只能get，这里要用post！
+    /*@PostMapping("/user")//get只能get，这里要用post！
     public String hell(@RequestBody User user) {
         System.out.println("name:"+user.getName());
         System.out.println("age:"+user.getAge());
         return "Hello SpringBoot!";
-    }
+    }*/
 
 
 

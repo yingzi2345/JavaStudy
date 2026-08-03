@@ -1,5 +1,3 @@
 spring:
-  application:
-    name: springboot-simple
-server:
-  port:8080
+  profiles:
+    active: dev
