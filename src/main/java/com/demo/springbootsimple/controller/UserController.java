@@ -1,11 +1,21 @@
 package com.demo.springbootsimple.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.springbootsimple.entity.User;
+import com.demo.springbootsimple.mapper.UserMapper;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.beans.PropertyVetoException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user") //给 Contr的oller 中所有方法统一加一个路径前缀，避免每个方法都重复写路径
 public class UserController {
+
+    @Resource
+   private UserMapper userMapper;
 
     //RESTful 风格写法：
     /**
@@ -23,8 +33,8 @@ public class UserController {
      * @return
      */
     @GetMapping
-    public String getAll(){
-        return "查询所有用户成功";
+    public Page<User> getAll(){
+        return userMapper.selectPage(new Page<User>(1,10),new LambdaUpdateWrapper<>());
     }
 
     /**
