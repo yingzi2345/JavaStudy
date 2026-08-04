@@ -1,18 +1,17 @@
 package com.demo.springbootsimple.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@TableName("`user`")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+    private Long id;
     private String name;
-    private int age;
-    public void setName(String name){
-        this.name = name;
-    }
-    public void setAge(int age){
-        this.age =age;
-    }
-    public String getName(){
-        return this.name;
-    }
-    public int getAge(){
-        return this.age;
-    }
+    private Integer age;
+    private String email;
 }
