@@ -1,9 +1,12 @@
 package com.demo.springbootsimple.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.demo.springbootsimple.common.Result;
 import com.demo.springbootsimple.entity.User;
 import com.demo.springbootsimple.mapper.UserMapper;
+import com.demo.springbootsimple.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +18,7 @@ import java.util.List;
 public class UserController {
 
     @Resource
-   private UserMapper userMapper;
+    private UserService userService;
 
     //RESTful 风格写法：
     /**
@@ -24,8 +27,9 @@ public class UserController {
      * @return
      */
     @PostMapping
-    public String save(@RequestBody User user){
-        return "用户新增成功";
+    public Result save(@RequestBody User user){
+
+        return Result.success(userService.save(user));
     }
 
     /**
@@ -33,8 +37,9 @@ public class UserController {
      * @return
      */
     @GetMapping
-    public Page<User> getAll(){
-        return userMapper.selectPage(new Page<User>(1,10),new LambdaUpdateWrapper<>());
+    public Result getAll(){
+
+        return Result.success(userService.list());
     }
 
     /**
@@ -43,8 +48,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/{id}")
-    public String getOne(@PathVariable Long id){
-        return "查询单个用户成功";
+    public Result getOne(@PathVariable Long id){
+        return Result.success(userService.getById(id));
     }
 
     /**
@@ -53,9 +58,9 @@ public class UserController {
      * @param user
      * @return
      */
-    @PutMapping
-    public String update(@PathVariable Long id,@RequestBody User user){
-        return "修改用户成功";
+    @PutMapping({"/id"})
+    public Result update(@PathVariable Long id,@RequestBody User user){
+        return Result.success(userService.updateById(user));
     }
 
     /**
@@ -64,7 +69,16 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id){
-        return "删除用户成功";
+    public Result delete(@PathVariable Long id){
+        return Result.success(userService.removeById(id));
+    }
+
+    @GetMapping("/page")
+    public Result findPage(@RequestParam(defaultValue = "")Integer pageNum,@RequestParam(defaultValue = "10")Integer pageSize,@RequestParam(defaultValue = "")String name){
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+       if (!"".equals(name)&&name!=null){
+           lambdaQueryWrapper.like(User::getName,name);
+       }
+        return Result.success(userService.page(new Page<>(pageNum,pageSize),lambdaQueryWrapper));
     }
 }
