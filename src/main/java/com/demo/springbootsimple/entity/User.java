@@ -1,8 +1,6 @@
 package com.demo.springbootsimple.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,15 +14,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class User {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
     private String name;
     private Integer age;
     private String email;
-    @TableField(value = "create_time")//属性名不一致时，用这个注解映射
+    @TableField(value = "create_time",fill = FieldFill.INSERT)//属性名不一致时，用这个注解映射
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")//返回格式
     private LocalDateTime createTime;
-    @TableField(value = "update_time")
+    @TableField(value = "update_time",fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 }

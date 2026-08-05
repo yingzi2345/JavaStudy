@@ -58,7 +58,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PutMapping({"/id"})
+    @PutMapping({"/{id}"})
     public Result update(@PathVariable Long id,@RequestBody User user){
         return Result.success(userService.updateById(user));
     }
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    public Result findPage(@RequestParam(defaultValue = "")Integer pageNum,@RequestParam(defaultValue = "10")Integer pageSize,@RequestParam(defaultValue = "")String name){
+    public Result findPage(@RequestParam(defaultValue = "1")Integer pageNum,@RequestParam(defaultValue = "10")Integer pageSize,@RequestParam(defaultValue = "")String name){
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
        if (!"".equals(name)&&name!=null){
            lambdaQueryWrapper.like(User::getName,name);
