@@ -1,5 +1,7 @@
 package com.demo.springbootsimple.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -27,7 +29,9 @@ public class UserController {
         // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
         if("zhang".equals(username) && "123456".equals(password)) {
             StpUtil.login(10001);
-            return Result.success("登录成功");
+            // 第2步，获取 Token  相关参数
+            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+            return Result.success(tokenInfo);
         }
         return Result.error("登录失败");
     }
@@ -46,6 +50,7 @@ public class UserController {
      * @return
      */
     @PostMapping
+    @SaCheckPermission("user.add")
     public Result save(@RequestBody User user){
 
         return Result.success(userService.save(user));
@@ -56,6 +61,7 @@ public class UserController {
      * @return
      */
     @GetMapping
+    @SaCheckPermission("user.get")
     public Result getAll(){
 
         return Result.success(userService.list());
@@ -78,6 +84,7 @@ public class UserController {
      * @return
      */
     @PutMapping({"/{id}"})
+    @SaCheckPermission("user.update")
     public Result update(@PathVariable Long id,@RequestBody User user){
         return Result.success(userService.updateById(user));
     }
@@ -88,6 +95,7 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/{id}")
+    @SaCheckPermission("user.dalete")
     public Result delete(@PathVariable Long id){
         return Result.success(userService.removeById(id));
     }
